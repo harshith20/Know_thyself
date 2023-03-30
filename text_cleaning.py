@@ -1,7 +1,9 @@
 
 import nltk
+nltk.download('wordnet')
 nltk.download('omw-1.4')
-nltk.download("stopwords")
+nltk.download('punkt')
+nltk.download('stopwords')
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
