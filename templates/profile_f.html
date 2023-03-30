@@ -39,7 +39,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/static/js/pieChart.js"></script>
+<script type="text/javascript" src="/static/js/User_data_manipulation.js"></script>
 </head>
 {% if pyt is defined and pyt|length > 0 %}
 <script> var data = {{ pyt |tojson }};</script>
@@ -111,7 +111,7 @@ const chart = new Chart(ctx, {
 <ul>
     <li><a href="/">Home</a></li>
     <li><a href="/logout">logout</a></li>
-    {%if email=="Welocome admin"%}
+    {%if email=="Welcome admin"%}
     <li><a href="/admin">admin</a> </li>  
     {% endif %}
   </ul>
@@ -127,13 +127,15 @@ const chart = new Chart(ctx, {
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th style="width: 30px;">Date</th>
                     <th style="width: 25%" >Notes</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {%for i,j in data %}
+                {%for i,d,j in data %}
                 <tr>
+                    <td><input id="date" type="date" value="{{d}}" ></td>
                     
                     <td>
 

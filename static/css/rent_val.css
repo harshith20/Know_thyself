@@ -21,7 +21,10 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 } */
-
+input[type="date"] {
+  background-color: inherit;
+  color: white;
+}
 table {
 	width: 800px;
 	border-collapse: collapse;

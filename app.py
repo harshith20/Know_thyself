@@ -3,6 +3,7 @@ import os
 from flask import Flask, jsonify
 from flask import render_template, url_for, flash, request, redirect, Response
 import sqlite3
+from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from forms import LoginForm
 from text_cleaning import text_cleaning
@@ -174,11 +175,12 @@ def Insert():
      # else :
      #      curs.execute("INSERT INTO dairy(email,text) VALUES(?,?)",    [email,text])
      #      conn.commit()
-     curs.execute("SELECT diary_id,text FROM dairy where email = (?)",    [email])
+     curs.execute("SELECT diary_id,date,text FROM dairy where email = (?) ORDER BY date",    [email])
      user = curs.fetchall()
      data=[list(i) for i  in user]
+     
      conn.close()
-     note=[i[1] for i in data]
+     note=[i[2] for i in data]
      output=text_cleaning(note)
      output=pd.DataFrame(output)
      pyt={'values' : list(output.value_counts()),
@@ -191,7 +193,7 @@ def Insert():
      #      os.remove(os.path.join(basedir,UPLOAD_FOLDER,'fig.jpg'))
      #      plt.savefig(os.path.join(basedir,UPLOAD_FOLDER,'fig.jpg'), dpi=300)
      
-     return  render_template('profile_f.html',data=data,email='Welocome '+email.split('@')[0],pyt=pyt)
+     return  render_template('profile_f.html',data=data,email='Welcome '+email.split('@')[0],pyt=pyt)
 @app.route('/display_stat/<filename>')
 def display_stat(filename):
 	return redirect(url_for('static',filename='uploads/' + 'fig.jpg'))
@@ -203,11 +205,13 @@ def edit():
      if request.method == 'POST':
         print('edit')
         text = str(request.form['text'])
+        date = request.form['date']
+        print(date)
         id = request.form['string']
         if text.replace(" ", "") == '':
             msg = '!Its empty!! Please Input Notes'  
         else:  
-          curs.execute("UPDATE dairy SET text = (?) WHERE diary_id = (?) ", [text, id])
+          curs.execute("UPDATE dairy SET text = (?),date=(?) WHERE diary_id = (?) ", [text, date,id])
           conn.commit()      
           curs.close()
           msg = 'Record successfully Updated'   
@@ -220,8 +224,14 @@ def add():
      curs = conn.cursor()
      if request.method == 'POST':
         txtname = request.form['text']
+        date= request.form['date']
+        print('hello')
+        print(date)
         if txtname == '':
-            msg = 'Its empty!! Please Input Notes'  
+            msg = 'Its empty!! Please Input Notes' 
+        if date == '':
+            msg = 'Its empty!! Please enter date' 
+
         else:        
             curs.execute("SELECT count(text) FROM dairy where email = (?)",    [email])
             num = int(list(curs.fetchone())[0])
@@ -231,7 +241,7 @@ def add():
             elif  num>10:
                msg = 'Reached limit , Delete notes to add new' 
             else :
-               curs.execute("INSERT INTO dairy(email,text) VALUES(?,?)",    [email,txtname])
+               curs.execute("INSERT INTO dairy(email,date,text) VALUES(?,?,?)",    [email,date,txtname])
                conn.commit()
                msg = 'New record created successfully!!'   
      return jsonify(msg)
