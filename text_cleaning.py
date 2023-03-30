@@ -1,6 +1,7 @@
 
 import nltk
 nltk.download('omw-1.4')
+nltk.download("stopwords")
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
