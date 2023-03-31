@@ -4,7 +4,6 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('punkt')
 nltk.download('stopwords')
-from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
@@ -79,22 +78,6 @@ def final_preprocessed(func):
         return output
     return inner    
 
-@final_preprocessed
-def text_cleaning_tfidf(x):
-    sentences=[]
-    stemmer = PorterStemmer()
-    lemmatizer = WordNetLemmatizer()
-    for i in range(1):
-        paragraph=x
-        text = re.sub(r'\[[0-9]*\]',' ',paragraph)
-        text =' '.join(word for word in text.split(' ') if not word.startswith('@'))
-        text = re.sub(r"[^a-zA-Z0-9 ]", "", text)
-        sentenc = nltk.word_tokenize(text)
-        #sentenc = sentenc.split()
-        #print(sentenc)
-        sentenc = [lemmatizer.lemmatize(sentence)  for sentence in sentenc if sentence not in stopwords.words('english')]
-        #if sentence not in stopwords.words('english')
-    return sentenc 
 
 urlPattern        = r"((http://)[^ ]*|(https://)[^ ]*|(www\.)[^ ]*)"
 userPattern       = '@[^\s]+'
