@@ -3,7 +3,6 @@ import os
 from flask import Flask, jsonify
 from flask import render_template, url_for, flash, request, redirect, Response
 import sqlite3
-from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from forms import LoginForm
 from text_cleaning import text_cleaning
@@ -145,12 +144,6 @@ def email_check():
           if num>0:
                msg='user already exists'
                print(msg)
-          # else:
-          #      print('good')
-          #      curs.execute("INSERT INTO login(email,password) VALUES(?,?)",    [user_id,pwd])
-          #      conn.commit()      
-          #      curs.close()
-          #      msg="You have been registered"
 
 
     return msg  
@@ -167,11 +160,7 @@ def Insert():
      print(num)
      if  email is None or len(email)==0  :
           return redirect("/logout")
-     # elif  num>7:
-     #      print('reached limit')  
-     # else :
-     #      curs.execute("INSERT INTO dairy(email,text) VALUES(?,?)",    [email,text])
-     #      conn.commit()
+    
      curs.execute("SELECT diary_id,date,text FROM dairy where email = (?) ORDER BY date",    [email])
      user = curs.fetchall()
      data=[list(i) for i  in user]
@@ -184,11 +173,7 @@ def Insert():
      'labels' : list(output.value_counts().index),
      'colors': colors[0:int(output.nunique())]}
      
-     # if len(text) !=0:
-          
-     #      plt.pie(output.value_counts(), labels =output.value_counts().index, autopct='%.0f%%')
-     #      os.remove(os.path.join(basedir,UPLOAD_FOLDER,'fig.jpg'))
-     #      plt.savefig(os.path.join(basedir,UPLOAD_FOLDER,'fig.jpg'), dpi=300)
+     
      
      return  render_template('profile_f.html',data=data,email='Welcome '+email.split('@')[0],pyt=pyt)
 @app.route('/display_stat/<filename>')
