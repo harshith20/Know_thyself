@@ -24,9 +24,11 @@ emo_la={0:'sadness',1:'joy',2:'love',3:'anger',4:'fear',5:'surprise'}
 id2label=emo_la
 config.id2label = id2label
 config.label2id = {v:k for k,v in id2label.items()}
+print('line-27')
 model_state_dict = torch.load('mobilebert_classification_model.pt', map_location=torch.device('cpu'))
+print('line-29')
 model = MobileBertForSequenceClassification.from_pretrained('cambridgeltl/sst_mobilebert-uncased',config=config, state_dict=model_state_dict)
-
+print('line-31')
 
 contractions=pd.read_csv('contractions.csv',index_col='Contraction')
 contractions.index = contractions.index.str.lower()
@@ -42,7 +44,7 @@ def predict_emo(input_text):
     print(f'input_id :{input_ids}')
     # Convert input_ids to a PyTorch tensor
     input_tensor = torch.tensor([input_ids]).to(device)
-
+    print('line-47')
     # Make predictions on the input
     with torch.no_grad():
         outputs = model(input_tensor)
