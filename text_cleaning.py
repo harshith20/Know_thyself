@@ -28,6 +28,7 @@ print('line-27')
 model_state_dict = torch.load('mobilebert_classification_model.pt', map_location=torch.device('cpu'))
 print('line-29')
 model = MobileBertForSequenceClassification.from_pretrained('cambridgeltl/sst_mobilebert-uncased',config=config, state_dict=model_state_dict)
+del model_state_dict
 print('line-31')
 
 contractions=pd.read_csv('contractions.csv',index_col='Contraction')
@@ -54,6 +55,7 @@ def predict_emo(input_text):
     print(f'output :{logits}')
     predicted_label = torch.argmax(logits, dim=1).item()
     print(emo_la[predicted_label])
+    del  input_ids, outputs
     return emo_la[predicted_label]
 
 
