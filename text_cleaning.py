@@ -7,7 +7,7 @@ nltk.download('stopwords')
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-import re
+
 import pandas as pd
 # import pickle
 # model = pickle.load(open('finalized_model.pkl', 'rb'))
@@ -29,6 +29,11 @@ model_state_dict = torch.load('mobilebert_classification_model.pt', map_location
 print('line-29')
 model = MobileBertForSequenceClassification.from_pretrained('cambridgeltl/sst_mobilebert-uncased',config=config, state_dict=model_state_dict)
 del model_state_dict
+# Release unneeded memory
+torch.cuda.empty_cache()
+
+# Enable cudnn auto-tuner
+torch.backends.cudnn.benchmark = True
 print('line-31')
 
 contractions=pd.read_csv('contractions.csv',index_col='Contraction')
@@ -105,6 +110,7 @@ lolemoji          = r"[8:=;]['`\-]?p+"
 lemmatizer = WordNetLemmatizer()
 @final_preprocessed
 def text_cleaning(tweet):
+    import re
     tweet = tweet.lower()
 
     # Replace all URls with '<url>'
