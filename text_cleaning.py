@@ -15,6 +15,7 @@ import torch
 import transformers
 from transformers import AutoTokenizer, MobileBertForSequenceClassification
 # Load the saved model
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model_name = r'cambridgeltl/sst_mobilebert-uncased'
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 config = transformers.MobileBertConfig(vocab_size = len(tokenizer.get_vocab()))
@@ -24,7 +25,7 @@ id2label=emo_la
 config.id2label = id2label
 config.label2id = {v:k for k,v in id2label.items()}
 print('line-27')
-model_state_dict = torch.load('mobilebert_classification_model.pt', map_location=torch.device('cpu'))
+model_state_dict = torch.load('mobilebert_classification_model.pt', map_location=torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 print('line-29')
 model = MobileBertForSequenceClassification.from_pretrained('cambridgeltl/sst_mobilebert-uncased',config=config, state_dict=model_state_dict)
 del model_state_dict
