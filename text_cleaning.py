@@ -17,6 +17,7 @@ from transformers import AutoTokenizer, MobileBertForSequenceClassification
 model_name = r'harshith20/Emotion_predictor'
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = MobileBertForSequenceClassification.from_pretrained(model_name)
+emo_la={0:'sadness',1:'joy',2:'love',3:'anger',4:'fear',5:'surprise'}
 # Release unneeded memory
 torch.cuda.empty_cache()
 
